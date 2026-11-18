@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The ase plugin (docs/architecture.md §7.35). Built, packed and signed by NKeeper.Plugin.Build, which also builds
+    ../frontend with npm. It brings the plugin's .nkp to ../artifacts/plugins.
+  -->
+  <PropertyGroup>
+    <!-- For Linux, where NKeeper runs, as the other engines: the package is flat. -->
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+    <SelfContained>false</SelfContained>
+    <!-- English only: the package is flat, so each language's resources would land on one name. -->
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <!-- The SDK and db-core's assembly are shared, from the server and from db-core, so they aren't copied (plugin-security.md §7.1). -->
+    <PackageReference Include="NKeeper.Abstractions" ExcludeAssets="runtime" />
+    <PackageReference Include="NKeeper.Plugins.Databases" ExcludeAssets="runtime" />
+    <PackageReference Include="NKeeper.Plugin.Build" PrivateAssets="all" />
+    <!-- The driver: the plugin's own, loaded in its own context. It keeps the password (see the manifest). -->
+    <PackageReference Include="AdoNetCore.AseClient" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="NKeeper.Plugins.Ase.Tests" />
+  </ItemGroup>
+
+</Project>
