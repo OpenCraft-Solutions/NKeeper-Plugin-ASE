@@ -1,0 +1,46 @@
+{
+  "version": 2,
+  "dependencies": {
+    "net10.0": {
+      "AdoNetCore.AseClient": {
+        "type": "Direct",
+        "requested": "[0.19.2, )",
+        "resolved": "0.19.2",
+        "contentHash": "s00x590dCvinT/XlHZ9L3TiAx3csVGp9X0OB7XUSyjBUSbKH4kqGH1thjzbLZciQ/8kqUsXC54iYrN8oroan1w==",
+        "dependencies": {
+          "System.Security.Permissions": "4.5.0"
+        }
+      },
+      "NKeeper.Abstractions": {
+        "type": "Direct",
+        "requested": "[1.10.0, )",
+        "resolved": "1.10.0",
+        "contentHash": "9flxaKwYvA8jLaZKbmK0cQy6OobilUs84XoDWLehahamKKgrduSwnH0ljwpepYJGXZ6SV9OtuFRyi7hPxz9ilg=="
+      },
+      "NKeeper.Plugin.Build": {
+        "type": "Direct",
+        "requested": "[1.10.0, )",
+        "resolved": "1.10.0",
+        "contentHash": "bG3MpC4pqzKFB4RAkt2Lnfy4mUwpn7clcRkLeAs3woDM3LJwFroiZfhBcL0eCZOEymcmV/ZsvgWWVxbrxkzx3w==",
+        "dependencies": {
+          "NKeeper.Abstractions": "1.10.0"
+        }
+      },
+      "NKeeper.Plugins.Databases": {
+        "type": "Direct",
+        "requested": "[1.0.0, )",
+        "resolved": "1.0.0",
+        "contentHash": "CPgK/G4DDhAsKAziQTQOxA1OOu+duVBw76yIv39U3dzKCLMq5DFuoDVLeZqFd2Cml+CuWV/PQKiU2YUARcJr5g==",
+        "dependencies": {
+          "NKeeper.Abstractions": "1.8.0"
+        }
+      },
+      "System.Security.Permissions": {
+        "type": "Transitive",
+        "resolved": "4.5.0",
+        "contentHash": "9gdyuARhUR7H+p5CjyUB/zPk7/Xut3wUSP8NJQB6iZr8L3XUXTMdoLeVAg9N4rqF8oIpE7MpdqHdDHQ7XgJe0g=="
+      }
+    },
+    "net10.0/linux-x64": {}
+  }
+}
