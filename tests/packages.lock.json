@@ -29,9 +29,9 @@
       },
       "NKeeper.Plugins.Databases": {
         "type": "Direct",
-        "requested": "[1.0.0, )",
-        "resolved": "1.0.0",
-        "contentHash": "CPgK/G4DDhAsKAziQTQOxA1OOu+duVBw76yIv39U3dzKCLMq5DFuoDVLeZqFd2Cml+CuWV/PQKiU2YUARcJr5g==",
+        "requested": "[1.1.0, )",
+        "resolved": "1.1.0",
+        "contentHash": "pWL951sB22rT/3XGv+Bi2hsqnZ53VmGwT0SdWlgIGy9/Crxv9OqnBMxa2amYyAme/uZOXSvYTGnM91f2u+TBGQ==",
         "dependencies": {
           "NKeeper.Abstractions": "1.8.0"
         }
@@ -284,7 +284,7 @@
         "dependencies": {
           "AdoNetCore.AseClient": "[0.19.2, )",
           "NKeeper.Abstractions": "[1.10.0, )",
-          "NKeeper.Plugins.Databases": "[1.0.0, )"
+          "NKeeper.Plugins.Databases": "[1.1.0, )"
         }
       }
     }

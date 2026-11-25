@@ -92,7 +92,25 @@ public sealed class AseTests(AseFixture ase)
         Assert.Equal(["id", "name"], (await session.ExploreAsync((await session.ExploreAsync(node))[0])).Select(Label));
         Assert.Equal($"USE [tempdb]\ngo\n\nSELECT TOP 1000 *\nFROM [dbo].[{table}]\ngo\n", await session.ScriptAsync(node, "selectTop"));
         Assert.Contains($"CREATE TABLE", await session.ScriptAsync(node, "create"), StringComparison.Ordinal);
-        Assert.Equal("blocking", Assert.Single(await session.ExploreAsync(server[2])).GetProperty("tool").GetString());
+        var management = await session.ExploreAsync(server[2]);
+        Assert.Equal("blocking", management[0].GetProperty("tool").GetString());
+        Assert.Contains("report:space", management.Select(n => n.GetProperty("tool").GetString()));
+    }
+
+    [Fact]
+    public async Task The_management_reports_read_each_section_or_say_what_a_login_cant_read()
+    {
+        ase.SkipIfUnavailable();
+        await using var session = await SessionAsync();
+
+        var names = (await session.Channel.ReplyAsync("info")).GetProperty("reports").EnumerateArray().Select(r => r.GetProperty("name").GetString()!).ToList();
+        Assert.Equal(["resources", "errors", "space", "dumps", "maintenance", "replication", "security", "license"], names);
+        foreach (var name in names)
+        {
+            var sections = (await session.Channel.ReplyAsync("report", new { name })).GetProperty("sections").EnumerateArray().ToList();
+            Assert.NotEmpty(sections);
+            Assert.All(sections, s => Assert.True(s.GetProperty("results").GetArrayLength() > 0 || s.GetProperty("error").GetString() is { Length: > 0 }, $"{name}: {s}"));
+        }
     }
 
     [Fact]

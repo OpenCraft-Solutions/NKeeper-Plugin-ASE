@@ -16,6 +16,12 @@ namespace NKeeper.Plugins.Ase;
 /// </summary>
 public sealed partial class AseDialect(bool replicationServer = false) : IDatabaseDialect
 {
+    /// <summary>1.x's ASE Management reports (db-core 1.1); Replication Server has its own, not yet ported.</summary>
+    public IReadOnlyList<DatabaseReportInfo> Reports => replicationServer ? [] : AseReports.All;
+
+    public Task<ToolReport> ReportAsync(DbConnection connection, string name, DateTimeOffset now, CancellationToken cancellationToken) =>
+        replicationServer ? throw new DatabaseToolException($"There's no “{name}” report.") : AseReports.ReportAsync(connection, name, now, cancellationToken);
+
     /// <summary>Lists are long in big databases; the explorer shows this many children at most.</summary>
     private const int MaxChildren = 5000;
 
@@ -27,7 +33,7 @@ public sealed partial class AseDialect(bool replicationServer = false) : IDataba
         "master", "model", "tempdb", "sybsystemprocs", "sybsystemdb", "sybsecurity", "sybmgmtdb", "dbccdb", "dbccalt", "sybpcidb", "sybdiag", "pubs2", "pubs3",
     };
 
-    private static string Quote(string name) => $"[{name.Replace("]", "]]", StringComparison.Ordinal)}]";
+    internal static string Quote(string name) => $"[{name.Replace("]", "]]", StringComparison.Ordinal)}]";
 
     public async Task<string> CurrentDatabaseAsync(DbConnection connection, CancellationToken cancellationToken) =>
         replicationServer ? string.Empty : (await DbQuery.ListAsync(connection, "SELECT db_name()", [], r => DbQuery.Text(r, 0) ?? string.Empty, cancellationToken))[0];
@@ -302,7 +308,7 @@ public sealed partial class AseDialect(bool replicationServer = false) : IDataba
                 cancellationToken),
             Kinds.ServerRoles => await DbQuery.ListAsync(
                 connection, "SELECT name FROM master..syssrvroles ORDER BY name", [], r => new SqlObjectNode { Kind = Kinds.ServerRole, Label = DbQuery.Text(r, 0)! }, cancellationToken),
-            Kinds.Management => [new SqlObjectNode { Kind = Kinds.Tool, Label = "Blocking Manager", Detail = "Blocking chains", Tool = Kinds.BlockingManagerTool }],
+            Kinds.Management => [new SqlObjectNode { Kind = Kinds.Tool, Label = "Blocking Manager", Detail = "Blocking chains", Tool = Kinds.BlockingManagerTool }, .. AseReports.ToolNodes],
             _ => throw new DatabaseToolException($"“{node.Kind}” has no children."),
         };
         return [.. children.Select(c => c.Tool is not null ? c : c with { Scripts = ScriptsFor(c.Kind) })];
