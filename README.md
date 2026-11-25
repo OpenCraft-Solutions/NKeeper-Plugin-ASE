@@ -14,7 +14,9 @@ It contributes the **`ase` service type** ("SAP ASE", port 5000, health by TCP),
 - **Scripts:** Select Top 1000 Rows, Script as CREATE (from `syscomments`, and tables from `syscolumns`) and Script as EXECUTE.
 - **The blocking manager**, under Management, from `master..sysprocesses`, with the sessions' SQL when the login has `mon_role` and monitoring is on; and kill, audited as `ase.kill`.
 
-**Not yet:** Replication Server, 1.x's Management reports (Space, Replication Drift, Backups, Error Log, Resources, Logins, Maintenance, License), Copy Database and the insurance survey.
+**Management reports** (1.1.0, on db-core 1.1), 1.x's, under Management in the explorer: Resources & Activity (configured limits in use, transactions, sessions, caches, engines), Error Log (recent errors and deadlocks), Space (databases' data and log, devices, with scripts to grow them), Backups (each database's last full and log dump), Maintenance (big tables, stale statistics), Replication Health (each database's log, whether replication holds its truncation point, Rep Agents), Logins & Users (locked and idle logins, users without logins) and License (SySAM licenses, grace periods and expiry). Each only reads: the scripts it offers open in a query window. Monitoring tables need `mon_role` and `enable monitoring`; a section the login can't read says why, and falls back to what the server keeps itself where 1.x did.
+
+**Not yet:** Replication Server, 1.x's Replication Drift and Copy Database, and the insurance survey.
 
 The plugin's ID is `ase`, and it is built in: it is signed with NKeeper's official key and installed with NKeeper.
 
